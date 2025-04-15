@@ -1,1 +1,4 @@
+*
+!/custom_components
+!/.gitignore
 **/__pycache__
