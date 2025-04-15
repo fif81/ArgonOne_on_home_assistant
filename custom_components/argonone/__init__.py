@@ -39,4 +39,3 @@ async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
         config_entry, [FAN_DOMAIN, SENSOR_DOMAIN]
     )
     return True
-

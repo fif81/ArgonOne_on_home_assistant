@@ -14,7 +14,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up entry."""
-    await hass.async_add_entities([CpuFanController()])
+    async_add_entities([CpuFanController()])
 
 
 class CpuFanController(FanEntity):

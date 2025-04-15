@@ -1,8 +1,7 @@
 {
-  "domain": "argonone",
+  "domain": "Argon40",
   "name": "ArgonOne",
-  "version" : "1.0.0"
-  "codeowners": ["@fif81"],
+  "version" : "1.0.0",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/argonone",
   "iot_class": "local_polling",

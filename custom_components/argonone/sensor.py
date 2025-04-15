@@ -18,7 +18,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up entry."""
-    await hass.async_add_entities([CpuTemperatureSensor()])
+    async_add_entities([CpuTemperatureSensor()])
 
 
 class CpuTemperatureSensor(SensorEntity):

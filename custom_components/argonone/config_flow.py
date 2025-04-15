@@ -2,15 +2,16 @@
 
 import logging
 
-from config_entries import ConfigFlowResult
 import voluptuous as vol
 
 from homeassistant import config_entries
 
+from .const import DOMAIN
+
 _LOGGER = logging.getLogger(__name__)
 
 
-class ArgonOneConfigFlow(config_entries.ConfigFlow, domain="argonone"):
+class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for ArgonOne."""
 
     VERSION = 1
@@ -20,7 +21,7 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain="argonone"):
         """Initialize the config flow."""
         self.smbus = None
 
-    async def async_step_user(self, user_input=None) -> ConfigFlowResult:
+    async def async_step_user(self, user_input=None) -> config_entries.ConfigFlowResult:
         """Handle the user step."""
         if user_input is not None:
             self.smbus = user_input.get("smbus")
@@ -33,4 +34,3 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain="argonone"):
         }
 
         return self.async_show_form(step_id="user", data_schema=vol.Schema(options))
-
