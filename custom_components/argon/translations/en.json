@@ -14,9 +14,9 @@
         }
     },
     "selector": {
-        "device_model": {
-            "data": {
-                    "ARGON_ONE_V2": "ArgonOne V2"
+        "device_model_select": {
+            "options": {
+                "ARGON_ONE_V2": "Argon One V2"
             }
         }
     }
