@@ -46,7 +46,7 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     options=[e.name for e in DeviceModel],
                     sort=True,
                     mode=SelectSelectorMode.DROPDOWN,
-                    translation_key="device_model_options",
+                    translation_key="device_model_select",
                 )
             ),
         }
