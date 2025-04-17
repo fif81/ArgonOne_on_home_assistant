@@ -2,6 +2,7 @@
 
 import asyncio
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
@@ -35,7 +36,8 @@ class CpuTemperatureSensor(SensorEntity):
 
         def read_cpu_temp() -> Decimal | None:
             try:
-                with open(CPU_TEMP_FILE, encoding="utf-8") as f:
+                p = Path(CPU_TEMP_FILE)
+                with p.open(mode="r", encoding="utf-8") as f:
                     return Decimal(f.read()) / 1000
             except (OSError, FileNotFoundError, InvalidOperation):
                 return None

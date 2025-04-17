@@ -1,0 +1,5 @@
+#set_device_model:
+#  description: "Device model"
+#  fields:
+#    device_model:
+#      description: "Choose your device model"

@@ -1,6 +1,0 @@
-set_smbus:
-  description: "Set the SMBUS number (0 or 1)"
-  fields:
-    smbus:
-      description: "Choose the SMBUS number"
-      example: 1
