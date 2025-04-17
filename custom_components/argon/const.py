@@ -7,7 +7,6 @@ CPU_TEMP_FILE = "/sys/class/thermal/thermal_zone0/temp"
 
 
 class DeviceModel(Enum):
-    """ArgonOne models."""
+    """Device models."""
 
-    ARGON_ONE_V2 = 1
-    MOCKUP = 2
+    ARGON_ONE_V2 = "ArgonOne V2"

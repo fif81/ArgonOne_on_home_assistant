@@ -16,7 +16,7 @@
     "selector": {
         "device_model_select": {
             "options": {
-                "ARGON_ONE_V2": "Argon One V2"
+                "ARGON_ONE_V2xx": "Argon One V2"
             }
         }
     }

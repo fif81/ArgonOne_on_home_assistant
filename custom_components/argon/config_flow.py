@@ -33,9 +33,7 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             try:
                 return self.async_create_entry(
                     title=self.device_model,
-                    data={
-                        "device_model": DeviceModel.__getitem__(self.device_model).name
-                    },
+                    data={"device_model": DeviceModel(self.device_model).name},
                 )
             except:
                 errors["base"] = "something_went_wrong"
@@ -43,7 +41,7 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         options = {
             vol.Required("device_model"): SelectSelector(
                 SelectSelectorConfig(
-                    options=[e.name for e in DeviceModel],
+                    options=[e.value for e in DeviceModel],
                     sort=True,
                     mode=SelectSelectorMode.DROPDOWN,
                     translation_key="device_model_select",
