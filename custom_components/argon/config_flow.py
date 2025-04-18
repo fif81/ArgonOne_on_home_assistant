@@ -1,6 +1,7 @@
 """Config flow for ArgonOne integration."""
 
 import logging
+from typing import Any
 
 import voluptuous as vol
 
@@ -20,25 +21,13 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Argon."""
 
     VERSION = 1
+    MINOR_VERSION = 0
 
     def __init__(self) -> None:
         """Initialize the config flow."""
         self.device_model = None
 
-    async def async_step_user(self, user_input=None) -> config_entries.ConfigFlowResult:
-        """Handle the device step."""
-        errors = {}
-        if user_input is not None:
-            self.device_model = user_input.get("device_model")
-            try:
-                return self.async_create_entry(
-                    title=self.device_model,
-                    data={"device_model": DeviceModel(self.device_model).name},
-                )
-            except:
-                errors["base"] = "something_went_wrong"
-
-        options = {
+        self.options = {
             vol.Required("device_model"): SelectSelector(
                 SelectSelectorConfig(
                     options=[e.value for e in DeviceModel],
@@ -49,6 +38,22 @@ class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             ),
         }
 
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
+        """Handle the device step."""
+        errors = {}
+        if user_input is not None:
+            self.device_model = user_input.get("device_model")
+            try:
+                # TODO init smbus etc.
+                return self.async_create_entry(
+                    title=self.device_model,
+                    data={"device_model": DeviceModel(self.device_model).name},
+                )
+            except:
+                errors["base"] = "device_initialization_error"
+
         return self.async_show_form(
-            step_id="user", data_schema=vol.Schema(options), errors=errors
+            step_id="user", data_schema=vol.Schema(self.options), errors=errors
         )

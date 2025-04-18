@@ -3,20 +3,13 @@
     "description": "This integration allows you to control Argon devices.",
     "config": {
         "error": {
-
+            "device_initialization_error": "device initialization error"
         },
         "step": {
             "user": {
                 "data": {
                     "device_model": "Device model"
                 }
-            }
-        }
-    },
-    "selector": {
-        "device_model_select": {
-            "options": {
-                "ARGON_ONE_V2xx": "Argon One V2"
             }
         }
     }
