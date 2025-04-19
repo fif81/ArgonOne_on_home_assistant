@@ -1,16 +1,21 @@
 """CPU Sensor."""
 
-import asyncio
-from decimal import Decimal, InvalidOperation
-from pathlib import Path
+import logging
+from typing import Any, override
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
-from homeassistant.core import HomeAssistant
+from homeassistant.core import DOMAIN, HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.typing import StateType
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CPU_TEMP_FILE
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -19,27 +24,26 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up entry."""
-    async_add_entities([CpuTemperatureSensor()])
+    coordinator = entry.runtime_data.coordinator
+    async_add_entities([CpuTemperatureSensor(coordinator)], update_before_add=True)
 
 
-class CpuTemperatureSensor(SensorEntity):
+class CpuTemperatureSensor(SensorEntity, CoordinatorEntity):
     """processor temperature sensor."""
 
-    def __init__(self) -> None:
+    def __init__(self, coordinator: Any) -> None:
         """Initialize."""
+        super().__init__(coordinator)
         self._attr_name = "CPU Temperature"
-        self.attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
-        self._attr_unique_id = "cpu_temp_sensor"
+        self._attr_unique_id = f"{DOMAIN}-cpu_temperature"
+        self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+        self._attr_device_class = SensorDeviceClass.TEMPERATURE
+        self._attr_state_class = SensorStateClass.MEASUREMENT
 
-    async def async_update(self) -> None:
-        """Update sensor value."""
-
-        def read_cpu_temp() -> Decimal | None:
-            try:
-                p = Path(CPU_TEMP_FILE)
-                with p.open(mode="r", encoding="utf-8") as f:
-                    return Decimal(f.read()) / 1000
-            except (OSError, FileNotFoundError, InvalidOperation):
-                return None
-
-        self._attr_native_value = await asyncio.to_thread(read_cpu_temp)
+    @property
+    @override
+    def native_value(self) -> float | None:
+        """Return the state of the sensor."""
+        if self.coordinator.data is not None:
+            return self.coordinator.data["temperature"]
+        return None

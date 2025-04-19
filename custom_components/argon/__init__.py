@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.fan import DOMAIN as FAN_DOMAIN
-from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN, ConfigEntry
+from homeassistant.components.sensor import ConfigEntry, dataclass
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN
+from .coordinator import Coordinator
+from .hardware_controller import HardwareController
 
 # _PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.FAN]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
@@ -18,24 +19,40 @@ CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER = logging.getLogger(__name__)
 
+PLATFORMS: list[Platform] = [Platform.FAN, Platform.SENSOR]
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Set up ArgonOne."""
-    return True
+HARDWARE_CONTROLLER: HardwareController = HardwareController()
+
+
+@dataclass
+class RuntimeData:
+    """Class to hold your data."""
+
+    coordinator: Coordinator
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up config entries."""
 
-    await hass.config_entries.async_forward_entry_setups(
-        config_entry, [FAN_DOMAIN, SENSOR_DOMAIN]
+    coordinator = Coordinator(hass, config_entry, HARDWARE_CONTROLLER)
+    config_entry.runtime_data = RuntimeData(coordinator)
+
+    config_entry.async_on_unload(
+        config_entry.add_update_listener(_async_update_listener)
     )
+
+    await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
     return True
+
+
+async def _async_update_listener(
+    hass: HomeAssistant, config_entry: ConfigEntry
+) -> None:
+    """Handle config options update."""
+    await hass.config_entries.async_reload(config_entry.entry_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Unload config entries."""
-    await hass.config_entries.async_unload_platforms(
-        config_entry, [FAN_DOMAIN, SENSOR_DOMAIN]
-    )
+    await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
     return True
