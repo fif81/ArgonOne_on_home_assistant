@@ -10,8 +10,6 @@ from config.custom_components.argon.fan import CpuFanController
 from config.custom_components.argon.sensor import CpuTemperatureSensor
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.device_registry import DeviceEntryType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import CPU_TEMP_FILE, DOMAIN
