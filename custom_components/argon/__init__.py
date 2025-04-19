@@ -24,18 +24,11 @@ PLATFORMS: list[Platform] = [Platform.FAN, Platform.SENSOR]
 HARDWARE_CONTROLLER: HardwareController = HardwareController()
 
 
-@dataclass
-class RuntimeData:
-    """Class to hold your data."""
-
-    coordinator: Coordinator
-
-
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up config entries."""
 
     coordinator = Coordinator(hass, config_entry, HARDWARE_CONTROLLER)
-    config_entry.runtime_data = RuntimeData(coordinator)
+    config_entry.coordinator = coordinator
 
     config_entry.async_on_unload(
         config_entry.add_update_listener(_async_update_listener)

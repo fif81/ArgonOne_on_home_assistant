@@ -25,7 +25,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up entry."""
-    coordinator = entry.runtime_data.coordinator
+    coordinator = entry.coordinator
     async_add_entities([CpuTemperatureSensor(coordinator)], update_before_add=True)
 
 

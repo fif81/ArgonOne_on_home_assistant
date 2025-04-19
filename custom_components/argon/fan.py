@@ -20,7 +20,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up entry."""
-    coordinator = entry.runtime_data.coordinator
+    coordinator = entry.coordinator
     async_add_entities([CpuFanController(coordinator)])
 
 
@@ -33,7 +33,9 @@ class CpuFanController(FanEntity, CoordinatorEntity):
         self._attr_name = "CPU Fan"
         self._attr_unique_id = f"{DOMAIN}-cpu_fan"
         self._attr_supported_features = (
-            FanEntityFeature.SET_SPEED | FanEntityFeature.TURN_OFF
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.TURN_OFF
+            | FanEntityFeature.TURN_ON
         )
         self._attr_is_on = False
         self._attr_percentage = 0
@@ -61,3 +63,25 @@ class CpuFanController(FanEntity, CoordinatorEntity):
     def turn_off(self, **kwargs: Any) -> None:
         """Turn the entity off."""
         self.set_percentage(0)
+
+    async def async_turn_on(
+        self,
+        percentage: int | None = None,
+        preset_mode: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        """Turn the entity on."""
+        await super().async_turn_on(**kwargs)
+        await self.coordinator.async_refresh()
+
+    def turn_on(
+        self,
+        percentage: int | None = None,
+        preset_mode: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        """Turn the entity on."""
+        if percentage is not None:
+            self.set_percentage(percentage)
+        else:
+            self.set_percentage(100)
