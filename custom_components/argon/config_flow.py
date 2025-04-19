@@ -17,7 +17,7 @@ from .const import DOMAIN, DeviceModel
 _LOGGER = logging.getLogger(__name__)
 
 
-class ArgonOneConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class Argon40ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Argon."""
 
     VERSION = 1

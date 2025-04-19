@@ -18,19 +18,7 @@ from .hardware_controller import HardwareController
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(
-    hass: HomeAssistant, config_entry: ConfigEntry, async_add_entities
-) -> None:
-    """Set up entry."""
-    coordinator = config_entry.coordinator
-    await coordinator.async_config_entry_first_refresh()
-
-    async_add_entities(
-        [CpuTemperatureSensor(coordinator), CpuFanController(coordinator)]
-    )
-
-
-class Coordinator(DataUpdateCoordinator):
+class Argon40Coordinator(DataUpdateCoordinator):
     """The coordinator."""
 
     def __init__(

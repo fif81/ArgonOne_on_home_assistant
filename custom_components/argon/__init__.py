@@ -10,7 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 
 from .const import DOMAIN
-from .coordinator import Coordinator
+from .coordinator import Argon40Coordinator
 from .hardware_controller import HardwareController
 
 # _PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.FAN]
@@ -27,7 +27,7 @@ HARDWARE_CONTROLLER: HardwareController = HardwareController()
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up config entries."""
 
-    coordinator = Coordinator(hass, config_entry, HARDWARE_CONTROLLER)
+    coordinator = Argon40Coordinator(hass, config_entry, HARDWARE_CONTROLLER)
     config_entry.coordinator = coordinator
 
     config_entry.async_on_unload(
