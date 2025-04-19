@@ -9,8 +9,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN
-
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -31,7 +29,6 @@ class CpuFanController(FanEntity, CoordinatorEntity):
         """Initialize."""
         super().__init__(coordinator)
         self._attr_name = "CPU Fan"
-        self._attr_unique_id = f"{DOMAIN}-cpu_fan"
         self._attr_supported_features = (
             FanEntityFeature.SET_SPEED
             | FanEntityFeature.TURN_OFF

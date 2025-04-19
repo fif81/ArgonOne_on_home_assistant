@@ -6,8 +6,6 @@ from decimal import Decimal, InvalidOperation
 import logging
 from pathlib import Path
 
-from config.custom_components.argon.fan import CpuFanController
-from config.custom_components.argon.sensor import CpuTemperatureSensor
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
