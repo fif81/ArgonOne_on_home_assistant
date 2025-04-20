@@ -43,7 +43,7 @@ class CpuFanController(FanEntity, CoordinatorEntity):
 
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"{entry_id}_device")},
-            "name": "CPU Fan",
+            "name": coordinator.model,
             "manufacturer": "Argon40",
             "model": coordinator.model,
             "configuration_url": f"homeassistant://config/integrations/integration/{DOMAIN}",

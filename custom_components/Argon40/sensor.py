@@ -14,6 +14,8 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .const import DOMAIN
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -38,6 +40,11 @@ class CpuTemperatureSensor(SensorEntity, CoordinatorEntity):
         self._attr_device_class = SensorDeviceClass.TEMPERATURE
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self.unique_id = f"{entry_id}_cpu_temp"
+
+        self._attr_device_info = {
+            "identifiers": {(DOMAIN, f"{entry_id}_device")},
+            "connections": None,
+        }
 
     @callback
     def _handle_coordinator_update(self) -> None:
