@@ -24,8 +24,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up entry."""
     coordinator = entry.coordinator
-    cpu_temperature_sensor = CpuTemperatureSensor(coordinator)
-    async_add_entities([cpu_temperature_sensor, entry.id])
+    async_add_entities([CpuTemperatureSensor(coordinator, entry.entry_id)])
 
 
 class CpuTemperatureSensor(SensorEntity, CoordinatorEntity):
