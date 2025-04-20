@@ -5,9 +5,12 @@ from typing import Any, override
 
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import device_registry as rs
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,13 +22,13 @@ async def async_setup_entry(
 ) -> None:
     """Set up entry."""
     coordinator = entry.coordinator
-    async_add_entities([CpuFanController(coordinator)])
+    async_add_entities([CpuFanController(coordinator, entry.entry_id)])
 
 
 class CpuFanController(FanEntity, CoordinatorEntity):
     """CPU Fan Controller."""
 
-    def __init__(self, coordinator: Any) -> None:
+    def __init__(self, coordinator: Any, entry_id: str) -> None:
         """Initialize."""
         super().__init__(coordinator)
         self._attr_name = "CPU Fan"
@@ -36,6 +39,28 @@ class CpuFanController(FanEntity, CoordinatorEntity):
         )
         self._attr_is_on = False
         self._attr_percentage = 0
+        self.unique_id = f"{entry_id}_fan"
+
+        self._attr_device_info = {
+            "identifiers": {(DOMAIN, f"{entry_id}_device")},
+            "name": "CPU Fan",
+            "manufacturer": "Argon40",
+            "model": coordinator.model,
+            "configuration_url": f"homeassistant://config/integrations/integration/{DOMAIN}",
+            "connections": None,
+            "entry_type": rs.DeviceEntryType.SERVICE,
+            "hw_version": None,
+            "sw_version": None,
+            "suggested_area": None,
+            "via_device": None,
+        }
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        if "fan_speed" in self.coordinator.data:
+            self.set_percentage(self.coordinator.data["fan_speed"])
+        super()._handle_coordinator_update()
 
     @override
     async def async_set_percentage(self, percentage: int) -> None:

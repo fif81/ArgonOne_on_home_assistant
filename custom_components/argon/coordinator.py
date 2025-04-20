@@ -69,8 +69,6 @@ class Argon40Coordinator(DataUpdateCoordinator):
             result["temperature"] = await self.hass.async_add_executor_job(
                 read_cpu_temp
             )
-            # result["percentage"] = self._hardware_controller.fan_speed
-
         return result
         # except exception as err:
         # raise UpdateFailed(f"Error communicating with API: {err}") from err

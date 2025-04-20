@@ -42,18 +42,13 @@ class Argon40ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
         """Handle the device step."""
-        errors = {}
         if user_input is not None:
             self.device_model = user_input.get("device_model")
-            try:
-                # TODO init smbus etc.
-                return self.async_create_entry(
-                    title=self.device_model,
-                    data={"device_model": DeviceModel(self.device_model).name},
-                )
-            except:
-                errors["base"] = "device_initialization_error"
+            return self.async_create_entry(
+                title=self.device_model,
+                data={"device_model": self.device_model}
+            )
 
         return self.async_show_form(
-            step_id="user", data_schema=vol.Schema(self.options), errors=errors
+            step_id="user", data_schema=vol.Schema(self.options)
         )
