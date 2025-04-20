@@ -6,7 +6,7 @@ from typing import Any, override
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers import device_registry as rs
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -48,7 +48,7 @@ class CpuFanController(FanEntity, CoordinatorEntity):
             "model": coordinator.model,
             "configuration_url": f"homeassistant://config/integrations/integration/{DOMAIN}",
             "connections": None,
-            "entry_type": rs.DeviceEntryType.SERVICE,
+            "entry_type": dr.DeviceEntryType.SERVICE,
             "hw_version": None,
             "sw_version": None,
             "suggested_area": None,
